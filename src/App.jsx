@@ -109,24 +109,33 @@ function App() {
   }, [todos]);
 
   // Issue 10: Inline event handler dengan arrow function (re-create setiap render)
+  // Solution: Already good, already use dispatch action type instead of direct state manipulation
   return (
     <div className="app">
       <h1>My Todo List</h1>
 
       {/* Issue 11: Tidak ada label untuk accessibility */}
+      {/* Solution: Add label and aria-label attribute to the input element */}
+      <label htmlFor="todo-input">Todo Input</label>
       <div className="input-section">
         <input
           type="text"
+          id="todo-input"
+          aria-label="Todo Input"
+          aria-describedby={error ? "input-error" : undefined}
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyPress={(e) => {
+          onKeyDown={(e) => {
             if (e.key === "Enter") {
               addTodo();
             }
           }}
           placeholder="What needs to be done?"
         />
-        <button onClick={addTodo}>Add</button>
+        {/* add role and aria-label for button */}
+        <button onClick={addTodo} role="button" aria-label="Add Todo">
+          Add
+        </button>
       </div>
 
       {/* Issue 12: Inline styles (inconsistent dengan CSS file) */}

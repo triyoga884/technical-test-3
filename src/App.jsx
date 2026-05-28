@@ -77,17 +77,13 @@ function App() {
   };
 
   // Issue 7: Tidak ada error handling
-  // Solution: Add try-catch block to handle potential errors when parsing JSON
+  // Solution: No need try-catch since it using dispatch action type instead of direct state manipulation
   const deleteTodo = (id) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
+    dispatch({ type: "DELETE_TODO", payload: id });
   };
 
   const toggleTodo = (id) => {
-    setTodos(
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo,
-      ),
-    );
+    dispatch({ type: "TOGGLE_TODO", payload: id });
   };
 
   // Issue 8: Logic filtering yang bisa dipindah ke useMemo

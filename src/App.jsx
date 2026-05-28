@@ -26,7 +26,7 @@ const todosReducer = (state, action) => {
 function App() {
   // Issue 2: State management bisa lebih baik
   // Solution: Use useReducer for more complex state management
-  const [state, dispatch] = useReducer(todosReducer, []);
+  const [todos, dispatch] = useReducer(todosReducer, []);
   const [input, setInput] = useState("");
   const [filter, setFilter] = useState("all");
 
@@ -50,7 +50,7 @@ function App() {
   // Issue 4: useEffect yang terlalu sering run
   useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(todos));
-  });
+  }, [todos]);
 
   // Issue 5: Function yang tidak di-memoize, re-create setiap render
   const addTodo = () => {

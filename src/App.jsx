@@ -167,24 +167,34 @@ function App() {
 
       <div className="todo-list">
         {/* Issue 13: Tidak ada handling untuk empty state */}
-        {getFilteredTodos().map((todo) => (
-          // Issue 14: Key menggunakan index bisa lebih baik dengan ID
-          <div
-            key={todo.id}
-            className={`todo-item ${todo.completed ? "completed" : ""}`}
-          >
-            <input
-              type="checkbox"
-              checked={todo.completed}
-              onChange={() => toggleTodo(todo.id)}
-            />
-            {/* Issue 15: Potential XSS jika text dari user input */}
-            <span dangerouslySetInnerHTML={{ __html: todo.text }} />
-            <button className="delete-btn" onClick={() => deleteTodo(todo.id)}>
-              Delete
-            </button>
-          </div>
-        ))}
+        {/* Solution: Check if the filtered todos array is empty and display a message */}
+        {filteredTodos.length === 0 ? (
+          <p className="text-gray-500 text-center">
+            No todos found. Add a todo to get started.
+          </p>
+        ) : (
+          filteredTodos.map((todo) => (
+            // Issue 14: Key menggunakan index bisa lebih baik dengan ID
+            <div
+              key={todo.id}
+              className={`todo-item ${todo.completed ? "completed" : ""}`}
+            >
+              <input
+                type="checkbox"
+                checked={todo.completed}
+                onChange={() => toggleTodo(todo.id)}
+              />
+              {/* Issue 15: Potential XSS jika text dari user input */}
+              <span dangerouslySetInnerHTML={{ __html: todo.text }} />
+              <button
+                className="delete-btn"
+                onClick={() => deleteTodo(todo.id)}
+              >
+                Delete
+              </button>
+            </div>
+          ))
+        )}
       </div>
 
       <div className="stats">

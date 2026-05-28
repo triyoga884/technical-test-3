@@ -175,6 +175,7 @@ function App() {
         ) : (
           filteredTodos.map((todo) => (
             // Issue 14: Key menggunakan index bisa lebih baik dengan ID
+            // Solution: use todo.id as the key because it is a unique identifier
             <div
               key={todo.id}
               className={`todo-item ${todo.completed ? "completed" : ""}`}
@@ -185,7 +186,8 @@ function App() {
                 onChange={() => toggleTodo(todo.id)}
               />
               {/* Issue 15: Potential XSS jika text dari user input */}
-              <span dangerouslySetInnerHTML={{ __html: todo.text }} />
+              {/* Solution: Change to use text instead of dangerouslySetInnerHTML */}
+              <span>{todo.text}</span>
               <button
                 className="delete-btn"
                 onClick={() => deleteTodo(todo.id)}

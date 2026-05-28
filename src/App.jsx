@@ -64,8 +64,9 @@ function App() {
     }
 
     // Issue 6: Menggunakan Date.now() sebagai ID (bisa collision)
+    // Solution: Use crypto.randomUUID() to generate a random ID instead of Date.now()
     const newTodo = {
-      id: Date.now(),
+      id: crypto.randomUUID(),
       text: trimmed,
       completed: false,
       createdAt: new Date().toISOString(),

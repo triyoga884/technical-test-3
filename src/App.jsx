@@ -137,24 +137,29 @@ function App() {
           Add
         </button>
       </div>
-
+      {error && (
+        <p id="input-error" role="alert" className="text-red-500 text-sm mb-3">
+          {error}
+        </p>
+      )}
       {/* Issue 12: Inline styles (inconsistent dengan CSS file) */}
-      <div style={{ marginBottom: "20px", display: "flex", gap: "10px" }}>
+      {/* Solution: Move inline styles to CSS file and use semantic class names */}
+      <div className="filter-group">
         <button
           onClick={() => setFilter("all")}
-          style={{ background: filter === "all" ? "#28a745" : "#007bff" }}
+          className={`btn-filter ${filter === "all" ? "btn-filter--active" : ""}`}
         >
           All
         </button>
         <button
           onClick={() => setFilter("active")}
-          style={{ background: filter === "active" ? "#28a745" : "#007bff" }}
+          className={`btn-filter ${filter === "active" ? "btn-filter--active" : ""}`}
         >
           Active
         </button>
         <button
           onClick={() => setFilter("completed")}
-          style={{ background: filter === "completed" ? "#28a745" : "#007bff" }}
+          className={`btn-filter ${filter === "completed" ? "btn-filter--active" : ""}`}
         >
           Completed
         </button>

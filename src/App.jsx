@@ -207,8 +207,7 @@ function App() {
       </div>
 
       {/* Issue 16: Debug code yang tertinggal */}
-      {console.log("Rendering with todos:", todos)}
-      {console.log("API Key:", API_KEY)}
+      {/* Solution: Remove debug code */}
     </div>
   );
 }

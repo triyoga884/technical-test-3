@@ -1,12 +1,32 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 
 // Issue 1: Inline API key (security issue)
 // Solution: Use environment variables
 const API_KEY = import.meta.env.VITE_API_KEY;
 
+const todosReducer = (state, action) => {
+  switch (action.type) {
+    case "INIT_TODOS":
+      return action.payload;
+    case "ADD_TODO":
+      return [...state, action.payload];
+    case "DELETE_TODO":
+      return state.filter((todo) => todo.id !== action.payload);
+    case "TOGGLE_TODO":
+      return state.map((todo) =>
+        todo.id === action.payload
+          ? { ...todo, completed: !todo.completed }
+          : todo,
+      );
+    default:
+      throw new Error("Unknown action type: " + action.type);
+  }
+};
+
 function App() {
   // Issue 2: State management bisa lebih baik
-  const [todos, setTodos] = useState([]);
+  // Solution: Use useReducer for more complex state management
+  const [state, dispatch] = useReducer(todosReducer, []);
   const [input, setInput] = useState("");
   const [filter, setFilter] = useState("all");
 

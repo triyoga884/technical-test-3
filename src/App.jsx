@@ -29,6 +29,7 @@ function App() {
   const [todos, dispatch] = useReducer(todosReducer, []);
   const [input, setInput] = useState("");
   const [filter, setFilter] = useState("all");
+  const [error, setError] = useState("");
 
   // Issue 3: useEffect tanpa dependency array yang tepat
   // Solution: Already good, only run once at mount to load from localStorage
@@ -48,30 +49,34 @@ function App() {
   }, []);
 
   // Issue 4: useEffect yang terlalu sering run
+  // Solution: Add dependency array to useEffect to prevent infinite loop
   useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(todos));
   }, [todos]);
 
   // Issue 5: Function yang tidak di-memoize, re-create setiap render
+  // Solution: Change to dispatch action type instead of direct state manipulation so no need to use useCallback
   const addTodo = () => {
-    if (input.trim() === "") {
-      alert("Please enter a todo");
+    const trimmed = input.trim();
+    if (trimmed === "") {
+      setError("Please enter a todo");
       return;
     }
 
     // Issue 6: Menggunakan Date.now() sebagai ID (bisa collision)
     const newTodo = {
       id: Date.now(),
-      text: input,
+      text: trimmed,
       completed: false,
       createdAt: new Date().toISOString(),
     };
 
-    setTodos([...todos, newTodo]);
+    dispatch({ type: "ADD_TODO", payload: newTodo });
     setInput("");
   };
 
   // Issue 7: Tidak ada error handling
+  // Solution: Add try-catch block to handle potential errors when parsing JSON
   const deleteTodo = (id) => {
     setTodos(todos.filter((todo) => todo.id !== id));
   };

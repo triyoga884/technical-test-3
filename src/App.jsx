@@ -31,11 +31,19 @@ function App() {
   const [filter, setFilter] = useState("all");
 
   // Issue 3: useEffect tanpa dependency array yang tepat
+  // Solution: Already good, only run once at mount to load from localStorage
   useEffect(() => {
     // Load from localStorage
-    const saved = localStorage.getItem("todos");
-    if (saved) {
-      setTodos(JSON.parse(saved));
+    // Added try-catch block to handle potential errors when parsing JSON
+    try {
+      const saved = localStorage.getItem("todos");
+      if (saved) {
+        dispatch({ type: "INIT_TODOS", payload: JSON.parse(saved) });
+      }
+    } catch (error) {
+      console.error("Error loading todos from localStorage:", error);
+      // Removed corrupted data from localStorage
+      localStorage.removeItem("todos");
     }
   }, []);
 

@@ -1,4 +1,4 @@
-import { useState, useEffect, useReducer } from "react";
+import { useState, useEffect, useReducer, useMemo } from "react";
 
 // Issue 1: Inline API key (security issue)
 // Solution: Use environment variables
@@ -87,7 +87,8 @@ function App() {
   };
 
   // Issue 8: Logic filtering yang bisa dipindah ke useMemo
-  const getFilteredTodos = () => {
+  // Solution: useMemo will memoize the result of the filtering and only re-calculate when the todos or filter changes
+  const filteredTodos = useMemo(() => {
     if (filter === "active") {
       return todos.filter((todo) => !todo.completed);
     }
@@ -95,14 +96,17 @@ function App() {
       return todos.filter((todo) => todo.completed);
     }
     return todos;
-  };
+  }, [filter, todos]);
 
   // Issue 9: Calculation yang tidak perlu di setiap render
-  const stats = {
-    total: todos.length,
-    completed: todos.filter((t) => t.completed).length,
-    active: todos.filter((t) => !t.completed).length,
-  };
+  // Solution: useMemo will memoize the result of the calculation and only re-calculate when the todos change
+  const stats = useMemo(() => {
+    return {
+      total: todos.length,
+      completed: todos.filter((t) => t.completed).length,
+      active: todos.filter((t) => !t.completed).length,
+    };
+  }, [todos]);
 
   // Issue 10: Inline event handler dengan arrow function (re-create setiap render)
   return (

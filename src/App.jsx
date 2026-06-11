@@ -23,30 +23,41 @@ const todosReducer = (state, action) => {
   }
 };
 
+const loadTodosFromStorage = () => {
+  try {
+    const saved = localStorage.getItem("todos");
+    return saved ? JSON.parse(saved) : [];
+  } catch (error) {
+    console.error("Error loading todos from localStorage:", error);
+    localStorage.removeItem("todos");
+    return [];
+  }
+};
+
 function App() {
   // Issue 2: State management bisa lebih baik
   // Solution: Use useReducer for more complex state management
-  const [todos, dispatch] = useReducer(todosReducer, []);
+  const [todos, dispatch] = useReducer(todosReducer, loadTodosFromStorage());
   const [input, setInput] = useState("");
   const [filter, setFilter] = useState("all");
   const [error, setError] = useState("");
 
-  // Issue 3: useEffect tanpa dependency array yang tepat
-  // Solution: Already good, only run once at mount to load from localStorage
-  useEffect(() => {
-    // Load from localStorage
-    // Added try-catch block to handle potential errors when parsing JSON
-    try {
-      const saved = localStorage.getItem("todos");
-      if (saved) {
-        dispatch({ type: "INIT_TODOS", payload: JSON.parse(saved) });
-      }
-    } catch (error) {
-      console.error("Error loading todos from localStorage:", error);
-      // Removed corrupted data from localStorage
-      localStorage.removeItem("todos");
-    }
-  }, []);
+  // // Issue 3: useEffect tanpa dependency array yang tepat
+  // // Solution: Already good, only run once at mount to load from localStorage
+  // useEffect(() => {
+  //   // Load from localStorage
+  //   // Added try-catch block to handle potential errors when parsing JSON
+  //   try {
+  //     const saved = localStorage.getItem("todos");
+  //     if (saved) {
+  //       dispatch({ type: "INIT_TODOS", payload: JSON.parse(saved) });
+  //     }
+  //   } catch (error) {
+  //     console.error("Error loading todos from localStorage:", error);
+  //     // Removed corrupted data from localStorage
+  //     localStorage.removeItem("todos");
+  //   }
+  // }, []);
 
   // Issue 4: useEffect yang terlalu sering run
   // Solution: Add dependency array to useEffect to prevent infinite loop
